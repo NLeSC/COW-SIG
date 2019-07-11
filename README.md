@@ -36,16 +36,17 @@ To tell us something
 
 ## Upcoming meetings
 
-|       Date        |                   Topic                     | Presenter |
-|:-----------------:|:------------------------------------------- |:---------:|
-|   June 20, 2019   |                    TBD                      |           |
-|   July 11, 2019   |                    TBD                      |           |
-|  August 1, 2019   |                    TBD                      |           |
+|        Date        |                   Topic                     | Presenter |
+|:------------------:|:------------------------------------------- |:---------:|
+| September 12, 2019 |                    TBD                      |           |
+|   October 3, 2019  |       The Constellation workflow system     |   Jason   |
+
 
 
 ## Past meetings
 
-|       Date        |                   Topic                     | Presenter |
-|:-----------------:|:------------------------------------------- |:---------:|
-|                   |                                             |           |
+|        Date        |                   Topic                     | Presenter |
+|:------------------:|:------------------------------------------- |:---------:|
+|   July 11, 2019    |       The Pegasus worklow system            |  Lourens  |
+|   June 20, 2019    |       The Airflow workflow system           |  Lourens  |
 
