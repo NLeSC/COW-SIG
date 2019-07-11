@@ -1,0 +1,92 @@
+Pegasus presentation
+====================
+
+- Overview
+    - https://pegasus.isi.edu
+    - https://pegasus.isi.edu/blog/
+    - ISI USC, since 2000?, Ewa Deelman
+    - Still actively developed
+    - Java/Python (2.6 still supported!), high-quality code!
+    - Full-featured: monitoring, debugging, provenance, statistics, many back-ends
+
+- Architecture [https://pegasus.isi.edu/about/]
+    - Some assembly required
+
+- Workflows [https://pegasus.isi.edu/documentation/creating_workflows.php#abstract_workflows, https://github.com/pegasus-isi/pegasus/blob/master/share/pegasus/examples/grid-pegasus-mpi-cluster/daxgen.py]
+    - DAG, DAX, XML-based, similar to CWL
+    - Data passed between steps (unlike Airflow)
+    - fan-out/fan-in, scatter/gather, diverge/converge
+    - No cycles
+    - Generated from Python, Java, Perl
+    - Can be pure Workflow or entire task with resource reqs, step command lines, inputs
+
+- Catalogs
+    - Sites [https://pegasus.isi.edu/documentation/site.php]
+        - Describes compute resources, XML file
+        - Condor pools mainly
+    - Executables [https://pegasus.isi.edu/documentation/transformation.php]
+        - Text file
+        - Can stage or refer to installed executables
+        - Can run executables in containers
+    - Replica catalog [https://pegasus.isi.edu/documentation/replica.php]
+        - Metadata database
+        - Finds step inputs here, puts step outputs here
+
+- Execution [https://pegasus.isi.edu/documentation/running_workflows.php#executable_workflows]
+    - Immediate, not scheduled
+    - Steps
+        1. Remove steps computing already-available data
+        2. Select site(s!) to run
+        3. Cluster jobs into a single allocation
+        4. Add staging steps
+        5. Add data registration steps (which register outputs with the Replica Catalog)
+        6. Add create job dir and clean up jobs
+        7. Generate code for backend
+
+    - Set-up [https://pegasus.isi.edu/documentation/transfer.php]
+        - Cluster with shared file system
+        - Worker nodes with no shared file system (HTC, cloud)
+        - HTCondor pool (jungle computing, uses Condor File IO)
+
+    - Compute backends [https://pegasus.isi.edu/documentation/condor_pool.php]
+        - Shell script (local)
+        - HTCondor
+            - Local
+            - HTCondor jungle computing pool
+            - Glidein (pilot job)
+            - On VMs on EC2 or Google Cloud
+            - Pyglidein pilot jobs
+            - Globus GRAM
+            - CREAMCE (Italian grid)
+            - Glite/BLAH (Pegasus+HTCondor on head node of campus cluster)
+            - SDSC Comet with BOSCO glideins
+            - BOSCO remote SSH to PBS
+            - Titan/Open Science Grid
+        - PMC
+            - XSEDE/Blue Waters (Petascale computing)
+            - Submits to PBS
+        - Amazon AWS Batch
+
+    - File systems
+        - Posix file system
+        - SCP
+            - gsiscp (scp with grid certificates)
+        - HTTP
+        - GridFTP
+        - iRODS
+        - SRM or XrootD
+        - Amazon S3
+        - Google Storage
+
+    - Jupyter Notebooks [https://pegasus.isi.edu/documentation/jupyter-api.php]
+        - Create workflow from notebook and manage it
+        - Also specify catalogs from notebook
+        - Run and track status
+
+- Monitoring etc. [https://pegasus.isi.edu/documentation/monitoring_debugging_stats.php, https://pegasus.isi.edu/documentation/dashboard.php, https://pegasus.isi.edu/documentation/monitoring.php]
+    - Monitoring daemon per workflow, writes to SQLite DB in job dir on submit host
+    - Command line tools
+    - Dashboard (GUI)
+    - Supports notifications (also used to put intermediate results
+
+

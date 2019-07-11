@@ -1,0 +1,93 @@
+Notes COW-SIG presentation of Apache Airflow
+============================================
+
+Airflow basic usage
+-------------------
+
+- Start scheduler (runs stuff)
+- Start web server/application (control and monitoring)
+- Write workflows in Python
+- Submit them on the command line
+
+
+Workflows
+---------
+
+- Are DAGs
+- Edges carry dependencies, but no data!
+    - XComs: KVP in a Blackboard system (not sure what it's backed by, something like Redis)
+- Many kinds of steps
+    - Bash command
+    - Docker command
+    - SSH?
+    - Python function
+    - Google cloud stuff
+    - HTTP request
+    - Email/Slack/Dingding
+    - Analytics products, like Vertica and Cloudant?
+    - Samba/S3/HDFS
+
+
+Backends
+--------
+
+- Needs a better database for scalability
+    - JDBC/MSSQL/MySQL/PostgreSQL
+
+- Celery
+    - Needs RabbitMQ or Redis, as per normal
+    - Needs a cluster with Celery workers which run Airflow workers
+    - Needs a shared file system across the cluster
+
+- Dask
+    - Needs a Dask cluster with Airflow installed in the same virtualenv
+
+- Mesos
+    - Can run Airflow directly on a Mesos slave, or with a Docker container in between
+    - Fairly extensive instructions, either it's well-documented, or it's complex...
+
+- Kubernetes
+    - Runs each task (step) in a separate Pod
+    - Has its own Operator, need to rewrite steps
+
+- HPC
+    - Found a GitHub issue where people discussed making a Slurm backend, didn't happen
+
+
+Airflow and CWL
+---------------
+
+cwl-airflow:
+    - converts CWL into special Airflow DAG
+    - When Airflow scans this, it collects CWL jobs files and converts those into more Airflow DAGs
+        - These have CWLStepOperators, which execute a CWL step, possibly through cwltool
+        - They have a first step which copies input in, and a last one which copies output out
+    - These are then executed by Airflow
+        - Seems like everything is run locally and in a given directory?
+        - So not much advantage over cwltool?
+
+cwl-airflow-parser:
+    - Made by the same guy as cwl-airflow, overlapping time frames
+    - Seems more integrated, no documentation, not sure
+
+
+Discussion
+----------
+
+- Airflow is cron + bash on steroids in the cloud
+    - Intended for batch automation in an organisation
+    - This seems to be not a good match for scientific practice
+        - We often link command line tools together and pass non-trivial amounts of data
+    - Fundamentally different thing than a scientific workflow system
+
+- Workflows are not infrastructure-agnostic
+    - FAIR Workflows project wanted separation between what to do and how to do it, and I agree. Having a different kind of step for running something in a Docker locally, or in a Docker on Google Function, or in a Docker on Kubernetes is just bothering the user with irrelevant details.
+
+- cwl-airflow is a hack
+    - It bypasses the normal Airflow job submission system, because the CWL idea of a job is different
+    - Not sure how universal this is
+    - Possible different approach is to make a cwl-runner command line tool that transforms incoming jobs and then submits them to Airflow, but that seems clunky too
+    - There must be another workflow system out there that's closer to what we want and CWL
+
+
+
