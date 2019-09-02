@@ -38,7 +38,7 @@ To tell us something
 
 |        Date        |                   Topic                     | Presenter |
 |:------------------:|:------------------------------------------- |:---------:|
-| September 12, 2019 |                    TBD                      |           |
+| September 12, 2019 |       The Orange data analysis system       |   Erik    |
 |   October 3, 2019  |       The Constellation workflow system     |   Jason   |
 
 
